@@ -44,5 +44,10 @@ current = true
 position = Vector2( 0, 56 )
 shape = SubResource( 3 )
 
+[node name="SpearheadOff" type="Timer" parent="."]
+wait_time = 0.25
+one_shot = true
+
 [connection signal="body_entered" from="Feet" to="." method="_on_Feet_body_entered"]
 [connection signal="body_exited" from="Feet" to="." method="_on_Feet_body_exited"]
+[connection signal="timeout" from="SpearheadOff" to="." method="_on_SpearheadOff_timeout"]

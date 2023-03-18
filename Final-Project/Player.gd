@@ -118,5 +118,11 @@ func thrust_animation():
 
 func spear_launch():
 	launching = true
+	$SpearheadOff.start()
+	$Spear.get_child(1).disabled = true
 	remove_spear_from_ground()
 	apply_central_impulse(($Spear.global_position - get_global_mouse_position()).normalized() *20000)
+
+
+func _on_SpearheadOff_timeout():
+	$Spear.get_child(1).disabled = false
