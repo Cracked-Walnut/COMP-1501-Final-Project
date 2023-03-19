@@ -18,11 +18,14 @@ var spear_contact_static_body
 func _ready():
 	#Connect Signals
 	$Spear.connect("tip_touched", self, "on_spear_tip_touched")
+	$Spear.connect("turn_tip_on", self, "on_timer_timeout")
 
 func _process(delta):
 	#Get input for actions (not movement)
 	if Input.is_action_just_pressed("ui_thrust"):
 		thrust_spear()
+	if Input.is_action_just_pressed("ui_release"):
+		remove_spear_from_ground()
 		
 
 func _physics_process(delta):
@@ -34,8 +37,11 @@ func _physics_process(delta):
 		$Spear.set_angular_velocity(0)
 
 	#How to lift the spear from the ground
-	if spear_in_ground and grounded and Input.get_last_mouse_speed().y < 0:
-		remove_spear_from_ground()
+	# This code causes a lot of weird stuff
+	# Until we get it fixed, right click to release spear from ground
+	
+	#if spear_in_ground and grounded and Input.get_last_mouse_speed().y < 0:
+	#	remove_spear_from_ground()
 
 
 #This function sends movement data to the parent class
@@ -46,10 +52,10 @@ func apply_movement(state):
 		movement_direction += DIRECTION.RIGHT
 	if Input.is_action_pressed("ui_accept") and jump_time < TOP_JUMP_TIME and can_move:
 		movement_direction += DIRECTION.UP
-		jump_time += state.get_step()	
+		jump_time += state.get_step()
 	elif Input.is_action_just_released("ui_accept"):
 		jump_time = TOP_JUMP_TIME
-		pass	
+		pass
 	if(grounded):
 		jump_time = 0
 	else:
@@ -77,20 +83,19 @@ func _on_Feet_body_exited(body):
 func on_spear_tip_touched(body):
 	var groups = body.get_groups()
 	
-	if groups.has("ground"):
+	if groups.has("spearable"):
 		spear_now_in_ground()
 
 
-#Called if what the spear toched was the ground
+#Called if what the spear touched was the ground
 func spear_now_in_ground():
 	gravity_scale = 0
-	weight = 0
 	spear_in_ground = true
 	spear_contact_static_body = StaticBody2D.new()
 	get_tree().get_root().add_child(spear_contact_static_body)
 	spear_contact_static_body.global_position = $Spear/ContactPinJoint.global_position
 	$Spear/ContactPinJoint.node_b = spear_contact_static_body.get_path()
-	spear_rotation_speed = 200
+	spear_rotation_speed = 150
 	can_move = false
 
 
@@ -98,15 +103,17 @@ func spear_now_in_ground():
 func remove_spear_from_ground():
 	$Spear/ContactPinJoint.set_node_b($Spear/ContactPinJoint/ProxyRigidBody.get_path())
 	gravity_scale = 40
-	weight = 98
 	spear_in_ground = false
 	spear_rotation_speed = 20
-	spear_contact_static_body.queue_free()
 	can_move = true
+	
+	# turn off tip collision for a bit
+	$Spear.get_children()[3].start()
+	$Spear.get_children()[1].disabled = true
 
 func thrust_spear():
 	
-	if spear_in_ground and !grounded:
+	if spear_in_ground:
 		spear_launch()
 	
 	thrust_animation()
@@ -118,11 +125,12 @@ func thrust_animation():
 
 func spear_launch():
 	launching = true
-	$SpearheadOff.start()
-	$Spear.get_child(1).disabled = true
 	remove_spear_from_ground()
+	spear_contact_static_body.queue_free()
 	apply_central_impulse(($Spear.global_position - get_global_mouse_position()).normalized() *20000)
-
-
-func _on_SpearheadOff_timeout():
-	$Spear.get_child(1).disabled = false
+	
+	
+# turn on tip collision
+func on_timer_timeout():
+	$Spear.get_children()[1].disabled = false
+	
