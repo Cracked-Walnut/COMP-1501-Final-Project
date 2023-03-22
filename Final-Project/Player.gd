@@ -54,18 +54,31 @@ func _physics_process(delta):
 func apply_movement(state):
 	if Input.is_action_pressed("ui_left") and can_move:
 		movement_direction += DIRECTION.LEFT
+		$AnimatedSprite.flip_h = true
+		$AnimatedSprite.animation = "Run"
+		
 	if Input.is_action_pressed("ui_right") and can_move:
 		movement_direction += DIRECTION.RIGHT
+		$AnimatedSprite.flip_h = false
+		$AnimatedSprite.animation = "Run"
+		
 	if Input.is_action_pressed("ui_accept") and jump_time < TOP_JUMP_TIME and can_move:
 		movement_direction += DIRECTION.UP
 		jump_time += state.get_step()
+		$AnimatedSprite.animation = "Up"
 	elif Input.is_action_just_released("ui_accept"):
 		jump_time = TOP_JUMP_TIME
+		
+		
 		pass
 	if(grounded):
 		jump_time = 0
+		if(!Input.is_action_pressed("ui_left") && !Input.is_action_pressed("ui_right")):
+			$AnimatedSprite.animation = "Idle"
+	
 	else:
 		jump_time = TOP_JUMP_TIME
+		
 
 	if state.get_linear_velocity().y >0 and movement_direction.x !=0 or grounded:
 		launching = false
