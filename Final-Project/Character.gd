@@ -20,6 +20,7 @@ export (int) var top_fall_speed = 1300
 #State
 var movement_direction = Vector2()
 var launching = false
+export var health = 1
 
 
 func _integrate_forces(state):
@@ -45,4 +46,13 @@ func _integrate_forces(state):
 	
 func apply_movement(state):
 	#Abstract Method
+	pass
+
+func take_damage():
+	health = health-1
+	if health <= 0:
+		die()
+	
+func die():
+	print("You Are Dead")
 	pass

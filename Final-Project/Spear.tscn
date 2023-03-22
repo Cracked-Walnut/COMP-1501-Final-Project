@@ -20,6 +20,7 @@ func _on_Spear_body_entered(body):
 "
 
 [node name="Spear" type="RigidBody2D"]
+mass = 2.0
 gravity_scale = 0.0
 contacts_reported = 2
 contact_monitor = true
@@ -27,7 +28,6 @@ script = ExtResource( 3 )
 
 [node name="Shaft" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
-disabled = true
 
 [node name="Sprite" type="Sprite" parent="Shaft"]
 scale = Vector2( 1, 0.03125 )
@@ -55,5 +55,5 @@ gravity_scale = 0.0
 [node name="SpearTipOffTimer" type="Timer" parent="."]
 wait_time = 0.1
 
-[connection signal="body_entered" from="." to="." method="_on_Spear_body_entered"]
+[connection signal="body_shape_entered" from="." to="." method="_on_Spear_body_shape_entered"]
 [connection signal="timeout" from="SpearTipOffTimer" to="." method="_on_SpearTipOffTimer_timeout"]

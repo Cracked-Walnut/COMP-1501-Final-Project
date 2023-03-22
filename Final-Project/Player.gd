@@ -5,8 +5,9 @@ const TOP_JUMP_TIME = 0.1
 
 #Status Checks
 var spear_in_ground = false
-var grounded = false
 var can_move = true
+var grounded = false
+var can_be_hit = true
 
 #Parameters
 var spear_rotation_speed = 20
@@ -27,7 +28,12 @@ func _process(delta):
 	if Input.is_action_just_pressed("ui_release"):
 		remove_spear_from_ground()
 		
-
+	for collision in $Feet.get_overlapping_bodies():
+		var groups = collision.get_groups()
+		if groups.has("ground"):
+			grounded = true
+		
+		
 func _physics_process(delta):
 	
 	#Spear Control (Regular)
@@ -35,13 +41,13 @@ func _physics_process(delta):
 		$Spear.set_angular_velocity($Spear.get_angle_to(get_global_mouse_position())*spear_rotation_speed)
 	else:
 		$Spear.set_angular_velocity(0)
-
+				
 	#How to lift the spear from the ground
 	# This code causes a lot of weird stuff
 	# Until we get it fixed, right click to release spear from ground
 	
-	#if spear_in_ground and grounded and Input.get_last_mouse_speed().y < 0:
-	#	remove_spear_from_ground()
+	if spear_in_ground and grounded and Input.get_last_mouse_speed().y < 0:
+		remove_spear_from_ground()
 
 
 #This function sends movement data to the parent class
@@ -61,7 +67,7 @@ func apply_movement(state):
 	else:
 		jump_time = TOP_JUMP_TIME
 
-	if state.get_linear_velocity().y >0:
+	if state.get_linear_velocity().y >0 and movement_direction.x !=0 or grounded:
 		launching = false
 
 #Grounded Check
@@ -91,11 +97,12 @@ func on_spear_tip_touched(body):
 func spear_now_in_ground():
 	gravity_scale = 0
 	spear_in_ground = true
+	launching = false
 	spear_contact_static_body = StaticBody2D.new()
 	get_tree().get_root().add_child(spear_contact_static_body)
 	spear_contact_static_body.global_position = $Spear/ContactPinJoint.global_position
 	$Spear/ContactPinJoint.node_b = spear_contact_static_body.get_path()
-	spear_rotation_speed = 150
+	spear_rotation_speed = 180
 	can_move = false
 
 
@@ -133,4 +140,27 @@ func spear_launch():
 # turn on tip collision
 func on_timer_timeout():
 	$Spear.get_children()[1].disabled = false
-	
+
+
+func _on_Player_body_shape_entered(body_rid, body, body_shape_index, local_shape_index):
+	#if the collision box that triggered this collision is Body
+	if local_shape_index == 0:
+		var groups = body.get_groups()
+		if groups.has("Light_Enemy"):
+			take_knockback(body)
+			take_damage()
+			start_invincibility_frames()
+		if groups.has("Insta-Death"):
+			die()
+
+func take_knockback(body):
+	launching = true
+	apply_central_impulse((global_position - body.global_position).normalized() *20000 + Vector2(0, -1000))
+
+func start_invincibility_frames():
+	can_be_hit = false
+	$Invincibility_Timer.start(1.5)
+
+func _on_Invincibility_Timer_timeout():
+	can_be_hit = true;
+
