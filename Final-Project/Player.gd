@@ -8,6 +8,7 @@ var spear_in_ground = false
 var can_move = true
 var grounded = false
 var can_be_hit = true
+var falling = false
 
 #Parameters
 var spear_rotation_speed = 20
@@ -69,7 +70,6 @@ func apply_movement(state):
 	elif Input.is_action_just_released("ui_accept"):
 		jump_time = TOP_JUMP_TIME
 		
-		
 		pass
 	if(grounded):
 		jump_time = 0
@@ -82,6 +82,10 @@ func apply_movement(state):
 
 	if state.get_linear_velocity().y >0 and movement_direction.x !=0 or grounded:
 		launching = false
+		
+	if state.get_linear_velocity().y > 0 and !grounded:
+		$AnimatedSprite.animation = "Down"
+	
 
 #Grounded Check
 func _on_Feet_body_entered(body):
@@ -117,6 +121,7 @@ func spear_now_in_ground():
 	$Spear/ContactPinJoint.node_b = spear_contact_static_body.get_path()
 	spear_rotation_speed = 180
 	can_move = false
+	$AnimatedSprite.animation = "Down"
 
 
 #Called when the spear is removed from the ground
@@ -148,6 +153,7 @@ func spear_launch():
 	remove_spear_from_ground()
 	spear_contact_static_body.queue_free()
 	apply_central_impulse(($Spear.global_position - get_global_mouse_position()).normalized() *20000)
+	$AnimatedSprite.animation = "Up"
 	
 	
 # turn on tip collision

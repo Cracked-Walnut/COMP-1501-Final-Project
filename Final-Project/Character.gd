@@ -55,4 +55,7 @@ func take_damage():
 	
 func die():
 	print("You Are Dead")
-	pass
+	
+	#Reset stopwatch
+	get_node("/root/Main Scene").stopwatch = 0
+
