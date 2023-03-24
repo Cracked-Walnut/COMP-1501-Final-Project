@@ -9,6 +9,9 @@ func _ready():
 	add_child(Vanderfeld)
 	Vanderfeld.move_local_x(7608)
 	Vanderfeld.move_local_y(-7170)
+	Vanderfeld.gravity_scale = 3
+	Vanderfeld.get_children()[0].visible = true
+	Vanderfeld.get_children()[1].disabled = false
 	
 	$LevelScoreTimer.start()
 
@@ -24,11 +27,7 @@ func _process(delta):
 		elif(!showStopwatch):
 			get_node("/root/Main Scene/HUD/LevelScoreLabel").show()
 			showStopwatch = true;
-		
-		
 
-	
-	
-	#Vanderfeld.gravity_scale = 3
-	#Vanderfeld.get_children()[0].visible = true
-	#Vanderfeld.get_children()[1].disabled = false
+func _on_End_Flag_body_entered(body):
+	if body == $Player:
+		$HUD.level_beaten()

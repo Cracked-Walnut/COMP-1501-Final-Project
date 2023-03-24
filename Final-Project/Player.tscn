@@ -9,22 +9,27 @@
 friction = 0.0
 
 [sub_resource type="AtlasTexture" id=7]
+flags = 4
 atlas = ExtResource( 4 )
 region = Rect2( 0, 32, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=8]
+flags = 4
 atlas = ExtResource( 4 )
 region = Rect2( 64, 0, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=4]
+flags = 4
 atlas = ExtResource( 4 )
 region = Rect2( 0, 0, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=5]
+flags = 4
 atlas = ExtResource( 4 )
 region = Rect2( 32, 0, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=9]
+flags = 4
 atlas = ExtResource( 4 )
 region = Rect2( 32, 32, 32, 32 )
 
@@ -73,6 +78,7 @@ position = Vector2( 6, -9 )
 scale = Vector2( 4.21875, 4.86719 )
 frames = SubResource( 6 )
 animation = "Run"
+frame = 1
 playing = true
 
 [node name="Body" type="CollisionShape2D" parent="."]
