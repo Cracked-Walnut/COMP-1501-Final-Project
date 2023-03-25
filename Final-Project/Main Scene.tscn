@@ -1,8 +1,7 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Camera.gd" type="Script" id=1]
 [ext_resource path="res://Player.tscn" type="PackedScene" id=2]
-[ext_resource path="res://LightEnemy.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Foreground.tres" type="TileSet" id=4]
 [ext_resource path="res://MetalTilemap.png" type="Texture" id=5]
 [ext_resource path="res://Textures/End Flag.png" type="Texture" id=6]
@@ -14,7 +13,6 @@
 [ext_resource path="res://Textures/Backgrounds/Background_Parralax_4.png" type="Texture" id=12]
 [ext_resource path="res://Cloud_Movement.gd" type="Script" id=13]
 [ext_resource path="res://HUD.tscn" type="PackedScene" id=14]
-[ext_resource path="res://LightEnemy.gd" type="Script" id=15]
 
 [sub_resource type="ConvexPolygonShape2D" id=3]
 points = PoolVector2Array( 32, 32, 0, 32, 0, 0, 32, 0 )
@@ -101,16 +99,6 @@ centered = false
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
 position = Vector2( -47, 55 )
-
-[node name="LightEnemy" parent="." groups=["ground"] instance=ExtResource( 3 )]
-visible = false
-position = Vector2( 2235, -705 )
-scale = Vector2( 0.5, 0.5 )
-script = ExtResource( 15 )
-
-[node name="LightEnemy2" parent="." groups=["ground"] instance=ExtResource( 3 )]
-position = Vector2( 382, 158 )
-scale = Vector2( 0.5, 0.5 )
 
 [node name="Main Tilemap" type="TileMap" parent="." groups=["ground", "spearable"]]
 scale = Vector2( 0.786083, 0.774036 )

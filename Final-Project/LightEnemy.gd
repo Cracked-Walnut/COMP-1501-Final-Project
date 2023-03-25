@@ -3,22 +3,18 @@
 # extends "res://Character.gd"
 extends KinematicBody2D
 
-var speed = 20
-var motion = Vector2()
-var gravity = 20
-var direction = 1 # 1 = right, -1 = left
+var velocity = Vector2(100, 0)
 
 func _physics_process(delta):
-	motion.y += gravity
-	motion.x += speed * direction
+#	velocity.y += 7
 	
 #	if is_on_wall():
-#		direction = direction * -1
+#		velocity.x *= -1
 		
-	motion = move_and_slide(motion)
+	move_and_slide(velocity, Vector2(0, -1))
 	
-func is_on_wall():
-	print("Wall")
+#func is_on_wall():
+#	print("Wall")
 	
 
 # Called when the node enters the scene tree for the first time.
@@ -27,5 +23,5 @@ func is_on_wall():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
+# ttfunc _process(delta):
 #	pass
