@@ -2,19 +2,38 @@
 
 extends "res://Character.gd"
 
-var direction = 1 # 1 for right, -1 for left
-var move_speed = 150
-var move_velocity = Vector2(move_speed * direction, 0)
-#var detect_ground_raycast = $Detect_Ground.force_raycast_update()
+var direction = -1 # 1 for right, -1 for left
+var can_change_direction = true
 
-func _physics_process(delta):
-	if !$Detect_Ground.is_colliding():
-		direction *= -1
-	
+func apply_movement(state):
+	top_move_speed = 150
+	if direction == -1:
+		movement_direction += DIRECTION.LEFT
+		
 	if direction == 1:
-		apply_central_impulse(Vector2(move_speed * direction, 0))
-	else:
-		apply_central_impulse(Vector2(move_speed * (-direction), 0))
+		movement_direction += DIRECTION.RIGHT
+		
+	print(direction)
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
+
+
+
+func _on_Feet_body_entered(body):
+	pass # Replace with function body.
+
+
+func _on_LeftHitbox_body_entered(body):
+	direction = 1
+	can_change_direction = false
+	$Walking_Hitbox_timer.start(0.5)
+
+
+func _on_RightHitbox_body_entered(body):
+	direction = -1
+	can_change_direction = false
+	$Walking_Hitbox_timer.start(0.5)
+
+
+func _on_Walking_Hitbox_timer_timeout():
+	can_change_direction = true
+	pass # Replace with function body.
