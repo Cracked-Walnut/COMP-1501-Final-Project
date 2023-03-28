@@ -47,15 +47,4 @@ func _integrate_forces(state):
 func apply_movement(state):
 	#Abstract Method
 	pass
-
-func take_damage():
-	health = health-1
-	if health <= 0:
-		die()
 	
-func die():
-	print("You Are Dead")
-	
-	#Reset stopwatch
-	get_node("/root/Main Scene").stopwatch = 0
-

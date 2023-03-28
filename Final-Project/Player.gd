@@ -13,6 +13,7 @@ var falling = false
 #Parameters
 var spear_rotation_speed = 20
 var jump_time = TOP_JUMP_TIME
+var curr_checkpoint = 0
 
 #References
 var spear_contact_static_body
@@ -21,6 +22,7 @@ func _ready():
 	#Connect Signals
 	$Spear.connect("tip_touched", self, "on_spear_tip_touched")
 	$Spear.connect("turn_tip_on", self, "on_timer_timeout")
+	
 
 func _process(delta):
 	#Get input for actions (not movement)
@@ -182,4 +184,14 @@ func start_invincibility_frames():
 
 func _on_Invincibility_Timer_timeout():
 	can_be_hit = true;
+	pass
 
+func take_damage():
+	health = health-1
+	if health <= 0:
+		die()
+	
+func die():
+	var respawn_position = get_parent().get_node("Checkpoints").get_children()[curr_checkpoint].get_node("RespawnAt")
+	self.set_global_position(respawn_position.get_global_position())
+	health = 3

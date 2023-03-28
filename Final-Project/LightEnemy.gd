@@ -12,8 +12,6 @@ func apply_movement(state):
 		
 	if direction == 1:
 		movement_direction += DIRECTION.RIGHT
-		
-	print(direction)
 
 
 

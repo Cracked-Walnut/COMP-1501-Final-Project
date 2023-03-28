@@ -27,7 +27,14 @@ func _process(delta):
 		elif(!showStopwatch):
 			get_node("/root/Main Scene/HUD/LevelScoreLabel").show()
 			showStopwatch = true;
+	if Input.is_action_pressed("respawn"):
+		$Player.die()
 
 func _on_End_Flag_body_entered(body):
 	if body == $Player:
 		$HUD.level_beaten()
+
+func _on_Checkpoints_body_shape_entered(body_rid, body, body_shape_index, local_shape_index):
+	if body.name == "Player":
+		if local_shape_index > $Player.curr_checkpoint:
+			$Player.curr_checkpoint = local_shape_index
