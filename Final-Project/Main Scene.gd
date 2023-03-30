@@ -32,7 +32,14 @@ func _process(delta):
 
 func _on_End_Flag_body_entered(body):
 	if body == $Player:
+		if stopwatch < $ScoringAndData.level1Best || $ScoringAndData.level1Best == 0:
+			$ScoringAndData.level1Best = stopwatch
+			print($ScoringAndData.level1Best)
+		
 		$HUD.level_beaten()
+		$LevelScoreTimer.stop()
+		
+	
 
 func _on_Checkpoints_body_shape_entered(body_rid, body, body_shape_index, local_shape_index):
 	if body.name == "Player":

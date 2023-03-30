@@ -16,7 +16,7 @@ config/icon="res://icon.png"
 
 [autoload]
 
-ScoringAndTimer="*res://ScoringAndTimer.tscn"
+ScoringAndData="*res://ScoringAndData.tscn"
 
 [display]
 

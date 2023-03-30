@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://LevelSelectMenu.gd" type="Script" id=1]
 [ext_resource path="res://Xolonium-Regular.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://Textures/Star.png" type="Texture" id=3]
 
 [sub_resource type="DynamicFont" id=1]
 size = 54
@@ -20,6 +21,10 @@ font_data = ExtResource( 2 )
 [node name="LevelSelectMenu" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = 3.0
+margin_top = 22.0
+margin_right = 3.0
+margin_bottom = 22.0
 script = ExtResource( 1 )
 
 [node name="Level1Button" type="Button" parent="."]
@@ -29,6 +34,31 @@ margin_right = 346.0
 margin_bottom = 553.0
 custom_fonts/font = SubResource( 1 )
 text = "1"
+
+[node name="Sprite" type="Sprite" parent="Level1Button"]
+
+[node name="Star1" type="Sprite" parent="Level1Button/Sprite"]
+position = Vector2( 152, 159 )
+scale = Vector2( 2.4375, 2.4375 )
+texture = ExtResource( 3 )
+
+[node name="Star2" type="Sprite" parent="Level1Button/Sprite"]
+position = Vector2( 89, 163 )
+scale = Vector2( -2.313, 2.313 )
+texture = ExtResource( 3 )
+
+[node name="Star4" type="Sprite" parent="Level1Button/Sprite/Star2"]
+position = Vector2( 81.7121, 35.8841 )
+rotation = 3.14159
+scale = Vector2( 0.999784, -0.999784 )
+texture = ExtResource( 3 )
+offset = Vector2( 84.7568, -36.3243 )
+
+[node name="Star3" type="Sprite" parent="Level1Button/Sprite"]
+position = Vector2( 27, 159 )
+rotation = 3.14159
+scale = Vector2( 2.3125, -2.3125 )
+texture = ExtResource( 3 )
 
 [node name="Level2Button" type="Button" parent="."]
 margin_left = 505.0

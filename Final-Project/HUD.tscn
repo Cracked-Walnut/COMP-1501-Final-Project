@@ -1,7 +1,9 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://HUD.gd" type="Script" id=1]
 [ext_resource path="res://Xolonium-Regular.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://Textures/Popup.png" type="Texture" id=3]
+[ext_resource path="res://Textures/Star.png" type="Texture" id=4]
 
 [sub_resource type="DynamicFont" id=1]
 size = 40
@@ -13,6 +15,14 @@ font_data = ExtResource( 2 )
 size = 60
 outline_size = 5
 outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 36
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 36
 font_data = ExtResource( 2 )
 
 [node name="HUD" type="CanvasLayer"]
@@ -32,10 +42,58 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -369.0
-margin_top = -38.0
-margin_right = 369.0
-margin_bottom = 38.0
+margin_left = -361.0
+margin_top = -173.0
+margin_right = 365.0
+margin_bottom = -62.0
 custom_fonts/font = SubResource( 2 )
-text = "You beat the first level!"
+text = "Level Complete"
 align = 1
+
+[node name="NextButton" type="Button" parent="LevelBeaten"]
+margin_left = 448.0
+margin_top = 272.0
+margin_right = 549.0
+margin_bottom = 322.0
+custom_fonts/font = SubResource( 4 )
+text = "Next"
+
+[node name="LevelSelect" type="Button" parent="LevelBeaten"]
+margin_left = 123.0
+margin_top = 278.0
+margin_right = 367.0
+margin_bottom = 328.0
+custom_fonts/font = SubResource( 3 )
+text = "Level Select"
+
+[node name="Popup" type="Sprite" parent="LevelBeaten"]
+position = Vector2( 369, 148 )
+scale = Vector2( 1.56852, 1.56852 )
+z_index = -1
+texture = ExtResource( 3 )
+
+[node name="Star3" type="Sprite" parent="LevelBeaten"]
+position = Vector2( 324, 161 )
+rotation = 3.14159
+scale = Vector2( 3.35938, -3.35938 )
+texture = ExtResource( 4 )
+offset = Vector2( -10.3288, -3.39783 )
+
+[node name="Star" type="Sprite" parent="LevelBeaten/Star3"]
+position = Vector2( -13.3954, -3.27441 )
+scale = Vector2( -1, 1 )
+texture = ExtResource( 4 )
+
+[node name="Star2" type="Sprite" parent="LevelBeaten"]
+position = Vector2( 247, 143 )
+rotation = 3.14159
+scale = Vector2( 3.35938, -3.35938 )
+texture = ExtResource( 4 )
+
+[node name="Star1" type="Sprite" parent="LevelBeaten"]
+position = Vector2( 479, 145 )
+scale = Vector2( 3.35938, 3.35938 )
+texture = ExtResource( 4 )
+
+[connection signal="button_up" from="LevelBeaten/NextButton" to="." method="_on_NextButton_button_up"]
+[connection signal="button_up" from="LevelBeaten/LevelSelect" to="." method="_on_LevelSelect_button_up"]
