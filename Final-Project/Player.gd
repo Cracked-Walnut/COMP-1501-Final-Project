@@ -9,6 +9,7 @@ var can_move = true
 var grounded = false
 var can_be_hit = true
 var falling = false
+var spear_has_enemy = false
 
 #Parameters
 var spear_rotation_speed = 20
@@ -17,6 +18,7 @@ var curr_checkpoint = 0
 
 #References
 var spear_contact_static_body
+var enemy_on_spear
 
 func _ready():
 	#Connect Signals
@@ -29,7 +31,10 @@ func _process(delta):
 	if Input.is_action_just_pressed("ui_thrust"):
 		thrust_spear()
 	if Input.is_action_just_pressed("ui_release"):
-		remove_spear_from_ground()
+		if spear_in_ground:
+			remove_spear_from_ground()
+		if spear_has_enemy:
+			remove_spear_from_enemy()
 		
 	for collision in $Feet.get_overlapping_bodies():
 		var groups = collision.get_groups()
@@ -46,11 +51,14 @@ func _physics_process(delta):
 		$Spear.set_angular_velocity(0)
 				
 	#How to lift the spear from the ground
-	# This code causes a lot of weird stuff
-	# Until we get it fixed, right click to release spear from ground
-	
 	if spear_in_ground and grounded and Input.get_last_mouse_speed().y < 0:
 		remove_spear_from_ground()
+		
+	#Stop the enemy from rotating weirdly when on spear tip
+	if spear_has_enemy:
+		enemy_on_spear.rotation = $Spear.rotation
+
+	
 
 
 #This function sends movement data to the parent class
@@ -108,8 +116,12 @@ func _on_Feet_body_exited(body):
 func on_spear_tip_touched(body):
 	var groups = body.get_groups()
 	
-	if groups.has("spearable"):
-		spear_now_in_ground()
+	if !spear_has_enemy and !spear_in_ground:
+		if groups.has("spearable"):
+			spear_now_in_ground()
+		
+		if groups.has("Light_Enemy"):
+			stick_enemy(body);
 
 
 #Called if what the spear touched was the ground
@@ -137,11 +149,24 @@ func remove_spear_from_ground():
 	# turn off tip collision for a bit
 	$Spear.get_children()[3].start()
 	$Spear.get_children()[1].disabled = true
+	
+func remove_spear_from_enemy():
+	$Spear/ContactPinJoint.set_node_b($Spear/ContactPinJoint/ProxyRigidBody.get_path())
+	spear_has_enemy = false
+	enemy_on_spear.gravity_scale = 40
+	enemy_on_spear.mass = 10
+	enemy_on_spear.rotation = 0
+	
+	# turn off tip collision for a bit
+	$Spear.get_children()[3].start()
+	$Spear.get_children()[1].disabled = true
 
 func thrust_spear():
 	
 	if spear_in_ground:
 		spear_launch()
+	if spear_has_enemy:
+		launch_enemy()
 	
 	thrust_animation()
 
@@ -168,9 +193,10 @@ func _on_Player_body_shape_entered(body_rid, body, body_shape_index, local_shape
 	if local_shape_index == 0:
 		var groups = body.get_groups()
 		if groups.has("Light_Enemy"):
-			take_knockback(body)
-			take_damage()
-			start_invincibility_frames()
+			if body.alive:
+				take_knockback(body)
+				take_damage()
+				start_invincibility_frames()
 		if groups.has("Insta-Death"):
 			die()
 
@@ -195,3 +221,16 @@ func die():
 	var respawn_position = get_parent().get_node("Checkpoints").get_children()[curr_checkpoint].get_node("RespawnAt")
 	self.set_global_position(respawn_position.get_global_position())
 	health = 3
+
+func stick_enemy(body):
+	$Spear/ContactPinJoint.node_b = body.get_path()
+	body.gravity_scale = 0
+	body.mass = 0.1
+	body.stick_to_spear_tip()
+	spear_has_enemy = true
+	enemy_on_spear = body
+
+func launch_enemy():
+	enemy_on_spear.launching = true
+	remove_spear_from_enemy()
+	enemy_on_spear.apply_central_impulse(($Spear.global_position - get_global_mouse_position()).normalized() * -200)

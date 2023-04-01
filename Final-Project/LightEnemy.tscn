@@ -7,8 +7,8 @@
 friction = 0.0
 
 [sub_resource type="CapsuleShape2D" id=5]
-radius = 32.0
-height = 0.0
+radius = 26.0
+height = 12.0
 
 [sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 24, 7.5 )
@@ -17,8 +17,10 @@ extents = Vector2( 24, 7.5 )
 extents = Vector2( 7.5, 7 )
 
 [node name="Light_Enemy" type="RigidBody2D"]
+mode = 2
+mass = 10.0
 physics_material_override = SubResource( 2 )
-gravity_scale = 15.0
+gravity_scale = 40.0
 contacts_reported = 20
 contact_monitor = true
 script = ExtResource( 2 )
