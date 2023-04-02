@@ -13,6 +13,7 @@ func _ready():
 	$LevelBeaten/Star1.modulate = Color(0, 0, 0)
 	$LevelBeaten/Star2.modulate = Color(0, 0, 0)
 	$LevelBeaten/Star3.modulate = Color(0, 0, 0)
+	
 
 
 func level_beaten():
@@ -48,4 +49,4 @@ func _on_LevelSelect_button_up():
 #		elif get_owner().get_node("ScoringAndData").level1Best >= 180:
 #			get_owner().get_node("LevelSelectMenu/Level1Button/Sprite/Star1").modulate = Color(1, 1, 1)
 #
-		get_tree().change_scene("res://LevelSelectMenu.tscn")
+		var _d = get_tree().change_scene("res://LevelSelectMenu.tscn")

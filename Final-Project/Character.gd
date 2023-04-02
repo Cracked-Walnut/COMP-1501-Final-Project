@@ -44,7 +44,7 @@ func _integrate_forces(state):
 		
 	state.set_linear_velocity(final_force)
 	
-func apply_movement(state):
+func apply_movement(_state):
 	#Abstract Method
 	pass
 	

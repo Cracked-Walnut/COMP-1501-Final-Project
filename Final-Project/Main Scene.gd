@@ -19,7 +19,7 @@ func _on_LevelScoreTimer_timeout():
 	stopwatch += 1
 	$HUD.update_score(stopwatch)
 	
-func _process(delta):
+func _process(_delta):
 	if Input.is_action_just_released("ui_focus_next"):
 		if(showStopwatch):
 			get_node("/root/Main Scene/HUD/LevelScoreLabel").hide()
@@ -38,10 +38,11 @@ func _on_End_Flag_body_entered(body):
 		
 		$HUD.level_beaten()
 		$LevelScoreTimer.stop()
+		$"Level Complete".play()
 		
 	
 
-func _on_Checkpoints_body_shape_entered(body_rid, body, body_shape_index, local_shape_index):
+func _on_Checkpoints_body_shape_entered(_body_rid, body, _body_shape_index, local_shape_index):
 	if body.name == "Player":
 		if local_shape_index > $Player.curr_checkpoint:
 			$Player.curr_checkpoint = local_shape_index

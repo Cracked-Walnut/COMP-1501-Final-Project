@@ -9,7 +9,7 @@ var spear_tip
 var alive = true
 var grounded = false
 
-func apply_movement(state):
+func apply_movement(_state):
 	if alive:
 		top_move_speed = 150
 		if direction == -1:
@@ -22,7 +22,7 @@ func apply_movement(state):
 		movement_direction = DIRECTION.ZERO
 	
 	
-func _process(delta):
+func _process(_delta):
 		for collision in $Feet.get_overlapping_bodies():
 			var groups = collision.get_groups()
 			if groups.has("ground"):
@@ -35,13 +35,13 @@ func _on_Feet_body_exited(body):
 		grounded = false
 
 
-func _on_LeftHitbox_body_entered(body):
+func _on_LeftHitbox_body_entered(_body):
 	direction = 1
 	can_change_direction = false
 	$Walking_Hitbox_timer.start(0.5)
 
 
-func _on_RightHitbox_body_entered(body):
+func _on_RightHitbox_body_entered(_body):
 	direction = -1
 	can_change_direction = false
 	$Walking_Hitbox_timer.start(0.5)
@@ -52,4 +52,6 @@ func _on_Walking_Hitbox_timer_timeout():
 	pass # Replace with function body.
 	
 func stick_to_spear_tip():
+	if alive == true:
+		$"Enemy Killed".play()
 	alive = false

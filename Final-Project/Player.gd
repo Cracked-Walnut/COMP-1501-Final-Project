@@ -24,11 +24,11 @@ var enemy_on_spear
 
 func _ready():
 	#Connect Signals
-	$Spear.connect("tip_touched", self, "on_spear_tip_touched")
-	$Spear.connect("turn_tip_on", self, "on_timer_timeout")
+	var _d = $Spear.connect("tip_touched", self, "on_spear_tip_touched")
+	var _e = $Spear.connect("turn_tip_on", self, "on_timer_timeout")
 	
 
-func _process(delta):
+func _process(_delta):
 	#Get input for actions (not movement)
 	if Input.is_action_just_pressed("ui_thrust"):
 		thrust_spear()
@@ -55,7 +55,7 @@ func _process(delta):
 			thrustAnimationFrames = 0
 			thrustAnimating = false
 			
-func _physics_process(delta):
+func _physics_process(_delta):
 	
 	#Spear Control (Regular)
 	if $Spear.get_angle_to(get_global_mouse_position()) != 0:
@@ -76,6 +76,7 @@ func _physics_process(delta):
 
 #This function sends movement data to the parent class
 func apply_movement(state):
+	
 	if Input.is_action_pressed("ui_left") and can_move:
 		movement_direction += DIRECTION.LEFT
 		$AnimatedSprite.flip_h = true
@@ -90,10 +91,12 @@ func apply_movement(state):
 		movement_direction += DIRECTION.UP
 		jump_time += state.get_step()
 		$AnimatedSprite.animation = "Up"
+		if !$Jump.playing:
+			$Jump.play()
+		
 	elif Input.is_action_just_released("ui_accept"):
 		jump_time = TOP_JUMP_TIME
 		
-		pass
 	if(grounded):
 		jump_time = 0
 		if(!Input.is_action_pressed("ui_left") && !Input.is_action_pressed("ui_right")):
@@ -134,7 +137,7 @@ func on_spear_tip_touched(body):
 			spear_now_in_ground()
 		
 		if groups.has("Light_Enemy"):
-			stick_enemy(body);
+			stick_enemy(body)
 
 
 #Called if what the spear touched was the ground
@@ -192,6 +195,8 @@ func spear_launch():
 	spear_contact_static_body.queue_free()
 	apply_central_impulse(($Spear.global_position - get_global_mouse_position()).normalized() *20000)
 	$AnimatedSprite.animation = "Up"
+	if !$"Spear Launch".playing:
+		$"Spear Launch".play()
 	
 	
 # turn on tip collision
@@ -199,7 +204,7 @@ func on_timer_timeout():
 	$Spear.get_children()[1].disabled = false
 
 
-func _on_Player_body_shape_entered(body_rid, body, body_shape_index, local_shape_index):
+func _on_Player_body_shape_entered(_body_rid, body, _body_shape_index, local_shape_index):
 	#if the collision box that triggered this collision is Body
 	if local_shape_index == 0:
 		var groups = body.get_groups()
@@ -208,7 +213,7 @@ func _on_Player_body_shape_entered(body_rid, body, body_shape_index, local_shape
 				take_knockback(body)
 				take_damage()
 				start_invincibility_frames()
-		if groups.has("Insta-Death"):
+		if groups.has("Deadly"):
 			die()
 
 func take_knockback(body):
@@ -227,11 +232,15 @@ func take_damage():
 	health = health-1
 	if health <= 0:
 		die()
+	$"Player Hit".play()
 	
 func die():
 	var respawn_position = get_parent().get_node("Checkpoints").get_children()[curr_checkpoint].get_node("RespawnAt")
 	self.set_global_position(respawn_position.get_global_position())
 	health = 3
+	grounded = false
+	if !$"Player Hit".playing:
+		$"Player Hit".play()
 
 func stick_enemy(body):
 	$Spear/ContactPinJoint.node_b = body.get_path()
