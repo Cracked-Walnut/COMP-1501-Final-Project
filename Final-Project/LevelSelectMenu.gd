@@ -17,7 +17,7 @@ func _on_Level1Button_button_up():
 	get_tree().change_scene("res://Main Scene.tscn")
 
 func _on_Level2Button_button_up():
-	pass # Replace with function body.
+	get_tree().change_scene("res://Level_2.tscn")
 	
 func _on_Level3Button_button_up():
 	pass # Replace with function body.

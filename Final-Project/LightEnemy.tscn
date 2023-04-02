@@ -16,7 +16,7 @@ extents = Vector2( 24, 7.5 )
 [sub_resource type="RectangleShape2D" id=4]
 extents = Vector2( 7.5, 7 )
 
-[node name="Light_Enemy" type="RigidBody2D"]
+[node name="Light_Enemy" type="RigidBody2D" groups=["Light_Enemy"]]
 mode = 2
 mass = 10.0
 physics_material_override = SubResource( 2 )

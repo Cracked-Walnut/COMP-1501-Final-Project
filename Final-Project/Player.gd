@@ -15,6 +15,8 @@ var spear_has_enemy = false
 var spear_rotation_speed = 20
 var jump_time = TOP_JUMP_TIME
 var curr_checkpoint = 0
+var thrustAnimating = false
+var thrustAnimationFrames = 0
 
 #References
 var spear_contact_static_body
@@ -41,7 +43,18 @@ func _process(delta):
 		if groups.has("ground"):
 			grounded = true
 		
-		
+	if thrustAnimating:
+		if thrustAnimationFrames <=2:
+			$Spear/Shaft/Sprite.position.x += 10
+			$Spear/Tip/Sprite.position.x += 10
+		else:
+			$Spear/Shaft/Sprite.position.x -= 10
+			$Spear/Tip/Sprite.position.x -= 10
+		thrustAnimationFrames += 1
+		if thrustAnimationFrames >= 6:
+			thrustAnimationFrames = 0
+			thrustAnimating = false
+			
 func _physics_process(delta):
 	
 	#Spear Control (Regular)
@@ -171,9 +184,7 @@ func thrust_spear():
 	thrust_animation()
 
 func thrust_animation():
-	#play sprite animation
-	
-	pass
+	thrustAnimating = true
 
 func spear_launch():
 	launching = true
