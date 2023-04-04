@@ -19,20 +19,37 @@ func _ready():
 func level_beaten():
 	$LevelBeaten.visible = true
 	
-	if get_owner().get_node("ScoringAndData").level1Best < 180 && get_owner().get_node("ScoringAndData").level1Best > 90:
-		$LevelBeaten/Star1.modulate = Color(1, 1, 1)
-		$LevelBeaten/Star2.modulate = Color(1, 1, 1)
-	
-	elif get_owner().get_node("ScoringAndData").level1Best <= 90:
-		$LevelBeaten/Star1.modulate = Color(1, 1, 1)
-		$LevelBeaten/Star2.modulate = Color(1, 1, 1)
-		$LevelBeaten/Star3.modulate = Color(1, 1, 1)
+	if get_tree().get_current_scene().get_name() == "Main Scene":
+		if get_owner().scoring.level1Best < 180 && get_owner().scoring.level1Best > 90:
+			$LevelBeaten/Star1.modulate = Color(1, 1, 1)
+			$LevelBeaten/Star2.modulate = Color(1, 1, 1)
 		
-	elif get_owner().get_node("ScoringAndData").level1Best >= 180:
-		$LevelBeaten/Star1.modulate = Color(1, 1, 1)
+		elif get_owner().scoring.level1Best <= 90:
+			$LevelBeaten/Star1.modulate = Color(1, 1, 1)
+			$LevelBeaten/Star2.modulate = Color(1, 1, 1)
+			$LevelBeaten/Star3.modulate = Color(1, 1, 1)
+			
+		elif get_owner().scoring.level1Best >= 180:
+			$LevelBeaten/Star1.modulate = Color(1, 1, 1)
+	
+	elif get_tree().get_current_scene().get_name() == "Level_2":
+		$LevelBeaten.visible = false;
+		if get_owner().scoring.level2Best < 180 && get_owner().scoring.level2Best > 90:
+			$LevelBeaten/Star1.modulate = Color(1, 1, 1)
+			$LevelBeaten/Star2.modulate = Color(1, 1, 1)
+		
+		elif get_owner().scoring.level2Best <= 90:
+			$LevelBeaten/Star1.modulate = Color(1, 1, 1)
+			$LevelBeaten/Star2.modulate = Color(1, 1, 1)
+			$LevelBeaten/Star3.modulate = Color(1, 1, 1)
+			
+		elif get_owner().scoring.level2Best >= 180:
+			$LevelBeaten/Star1.modulate = Color(1, 1, 1)
 
 func _on_NextButton_button_up():
-	pass # Replace with function body.
+	if get_tree().get_current_scene().get_name() == "Main Scene":
+		get_tree().change_scene("res://Level_2.tscn")
+		
 
 
 func _on_LevelSelect_button_up():

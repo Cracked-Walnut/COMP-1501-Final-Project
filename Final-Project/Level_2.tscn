@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=2]
+[gd_scene load_steps=44 format=2]
 
 [ext_resource path="res://Foreground.tres" type="TileSet" id=1]
 [ext_resource path="res://Player.tscn" type="PackedScene" id=2]
@@ -20,6 +20,8 @@
 [ext_resource path="res://Sounds/Background Music.mp3" type="AudioStream" id=18]
 [ext_resource path="res://Sounds/Button Click.wav" type="AudioStream" id=19]
 [ext_resource path="res://Sounds/Door Open.wav" type="AudioStream" id=20]
+[ext_resource path="res://HUD.tscn" type="PackedScene" id=21]
+[ext_resource path="res://Sounds/Level Complete.wav" type="AudioStream" id=22]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 16, 16, 0, 16, 0, 0, 16, 0 )
@@ -209,6 +211,10 @@ extents = Vector2( 34.5, 113.5 )
 
 [node name="Main Scene" type="Node2D"]
 script = ExtResource( 8 )
+
+[node name="LevelScoreTimer" type="Timer" parent="."]
+
+[node name="HUD" parent="." instance=ExtResource( 21 )]
 
 [node name="Ground_TileMap" type="TileMap" parent="." groups=["ground", "spearable"]]
 tile_set = ExtResource( 1 )
@@ -501,10 +507,14 @@ shape = SubResource( 19 )
 [node name="RespawnAt" type="Position2D" parent="Checkpoints/5"]
 position = Vector2( 3.5, 27.5 )
 
+[node name="Level Complete" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 22 )
+
 [node name="Background Music" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 18 )
 autoplay = true
 
+[connection signal="timeout" from="LevelScoreTimer" to="." method="_on_LevelScoreTimer_timeout"]
 [connection signal="timeout" from="Enemy_Spawn_timer" to="." method="_on_Enemy_Spawn_timer_timeout"]
 [connection signal="body_entered" from="Mechanisms/Button_1/RigidBody2D" to="." method="_on_Button_1_body_entered"]
 [connection signal="body_entered" from="Mechanisms/Button_2/RigidBody2D" to="." method="_on_Button2_body_entered"]
@@ -513,4 +523,5 @@ autoplay = true
 [connection signal="body_entered" from="Mechanisms/Button_5/RigidBody2D" to="." method="_on_Button5_body_entered"]
 [connection signal="body_entered" from="Mechanisms/Button_6/RigidBody2D" to="." method="_on_Button6_body_entered"]
 [connection signal="body_entered" from="Mechanisms/Button_7/RigidBody2D" to="." method="_on_Button7_body_entered"]
+[connection signal="body_entered" from="End Flag" to="." method="_on_End_Flag_body_entered"]
 [connection signal="body_shape_entered" from="Checkpoints" to="." method="_on_Checkpoints_body_shape_entered"]

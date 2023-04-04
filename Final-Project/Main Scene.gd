@@ -1,6 +1,7 @@
 extends Node2D
 
 var Vanderfeld = preload("res://RigidBody2D.tscn").instance()
+onready var scoring = get_node("/root/ScoringAndData")
 
 export var stopwatch = 0
 var showStopwatch = true
@@ -32,9 +33,9 @@ func _process(_delta):
 
 func _on_End_Flag_body_entered(body):
 	if body == $Player:
-		if stopwatch < $ScoringAndData.level1Best || $ScoringAndData.level1Best == 0:
-			$ScoringAndData.level1Best = stopwatch
-			print($ScoringAndData.level1Best)
+		if stopwatch < scoring.level1Best || scoring.level1Best == 0:
+			scoring.level1Best = stopwatch
+			print(scoring.level1Best)
 		
 		$HUD.level_beaten()
 		$LevelScoreTimer.stop()

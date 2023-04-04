@@ -2,6 +2,8 @@ extends Node2D
 
 var openDoor = preload("res://Open_Door.tscn").instance()
 var light_enemy = preload("res://LightEnemy.tscn")
+onready var scoring = get_node("/root/ScoringAndData")
+
 var door_1_opened = false
 var door_2_opened = false
 
@@ -11,6 +13,12 @@ var button4_pressed = false
 var button5_pressed = false
 var button6_pressed = false
 var button7_pressed = false
+
+var stopwatch = 0;
+var showStopwatch = true
+
+func _ready():
+	$LevelScoreTimer.start()
 
 
 func _process(_delta):
@@ -28,6 +36,9 @@ func _process(_delta):
 	if Input.is_action_pressed("respawn"):
 		$Player.die()
 
+func _on_LevelScoreTimer_timeout():
+	stopwatch += 1
+	$HUD.update_score(stopwatch)
 
 func _on_Button_1_body_entered(body):
 	var groups = body.get_groups()
@@ -125,3 +136,13 @@ func _on_Checkpoints_body_shape_entered(_body_rid, body, _body_shape_index, loca
 		if local_shape_index == 5:
 			$Enemy_Spawn_timer.start()
 			
+func _on_End_Flag_body_entered(body):
+	if body == $Player:
+		if stopwatch < scoring.level2Best || scoring.level2Best == 0:
+			scoring.level2Best = stopwatch
+			print(scoring.level2Best)
+		
+		$HUD.level_beaten()
+		$LevelScoreTimer.stop()
+		$"Level Complete".play()
+		
