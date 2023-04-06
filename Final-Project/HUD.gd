@@ -48,7 +48,7 @@ func level_beaten():
 
 func _on_NextButton_button_up():
 	if get_tree().get_current_scene().get_name() == "Main Scene":
-		get_tree().change_scene("res://Level_2.tscn")
+		var _d = get_tree().change_scene("res://Level_2.tscn")
 		
 
 

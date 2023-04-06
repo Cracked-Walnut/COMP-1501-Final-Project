@@ -1,10 +1,6 @@
 extends Control
 
 onready var scoring = get_node("/root/ScoringAndData")
-#var  = get_node("/root/PlayerVariables")
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

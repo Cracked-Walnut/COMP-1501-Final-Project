@@ -1,7 +1,7 @@
 extends Camera2D
 
 var target
-export var speed = 0.03
+export var speed = 0.10
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

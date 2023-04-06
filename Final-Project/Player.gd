@@ -163,19 +163,20 @@ func remove_spear_from_ground():
 	can_move = true
 	
 	# turn off tip collision for a bit
-	$Spear.get_children()[3].start()
-	$Spear.get_children()[1].disabled = true
+	$Spear.get_node("SpearTipOffTimer").start()
+	$Spear.get_node("Tip").set_deferred("disabled", true)
 	
 func remove_spear_from_enemy():
-	$Spear/ContactPinJoint.set_node_b($Spear/ContactPinJoint/ProxyRigidBody.get_path())
-	spear_has_enemy = false
-	enemy_on_spear.gravity_scale = 40
-	enemy_on_spear.mass = 10
-	enemy_on_spear.rotation = 0
+	if spear_has_enemy:
+		$Spear/ContactPinJoint.set_node_b($Spear/ContactPinJoint/ProxyRigidBody.get_path())
+		spear_has_enemy = false
+		enemy_on_spear.gravity_scale = 40
+		enemy_on_spear.mass = 10
+		enemy_on_spear.rotation = 0
 	
-	# turn off tip collision for a bit
-	$Spear.get_children()[3].start()
-	$Spear.get_children()[1].disabled = true
+		# turn off tip collision for a bit
+		$Spear.get_node("SpearTipOffTimer").start()
+		$Spear.get_node("Tip").set_deferred("disabled", true)
 
 func thrust_spear():
 	
@@ -214,7 +215,13 @@ func _on_Player_body_shape_entered(_body_rid, body, _body_shape_index, local_sha
 				take_damage()
 				start_invincibility_frames()
 		if groups.has("Deadly"):
+			
+			# seems like the system needs to process the global position,
+			# or else the player is teleported back to where they died.
+			# Don't remove this variable declaration.
+			var _d = global_position
 			die()
+			
 
 func take_knockback(body):
 	launching = true
@@ -237,10 +244,15 @@ func take_damage():
 func die():
 	var respawn_position = get_parent().get_node("Checkpoints").get_children()[curr_checkpoint].get_node("RespawnAt")
 	self.set_global_position(respawn_position.get_global_position())
+	
+	$Spear.set_global_position(respawn_position.get_global_position())
 	health = 3
 	grounded = false
 	if !$"Player Hit".playing:
 		$"Player Hit".play()
+		
+	remove_spear_from_ground()
+	remove_spear_from_enemy()
 
 func stick_enemy(body):
 	$Spear/ContactPinJoint.node_b = body.get_path()
