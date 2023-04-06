@@ -12,10 +12,10 @@ config_version=4
 
 config/name="COMP-1501-Final-Project"
 run/main_scene="res://LevelSelectMenu.tscn"
-config/icon="res://icon.png"
 
 [autoload]
 
+ScoringAndTimer="*res://ScoringAndTimer.tscn"
 ScoringAndData="*res://ScoringAndData.gd"
 
 [display]

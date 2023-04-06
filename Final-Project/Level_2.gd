@@ -117,17 +117,6 @@ func _on_Enemy_Spawn_timer_timeout():
 	new_enemy.global_position.x = 7863
 	new_enemy.global_position.y = -187
 
-#func _on_End_Flag_body_entered(body):
-	#if body == $Player:
-	#	if stopwatch < $ScoringAndData.level1Best || $ScoringAndData.level1Best == 0:
-	#		$ScoringAndData.level1Best = stopwatch
-	#		print($ScoringAndData.level1Best)
-	#	
-	#	$HUD.level_beaten()
-	#	$LevelScoreTimer.stop()
-		
-	
-
 func _on_Checkpoints_body_shape_entered(_body_rid, body, _body_shape_index, local_shape_index):
 	if body.name == "Player":
 		if local_shape_index > $Player.curr_checkpoint:
