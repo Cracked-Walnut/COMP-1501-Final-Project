@@ -13,13 +13,16 @@ func apply_movement(_state):
 	if alive:
 		top_move_speed = 150
 		if direction == -1:
+			$AnimatedSprite.flip_h = true
 			movement_direction += DIRECTION.LEFT
 			
 		if direction == 1:
+			$AnimatedSprite.flip_h = false
 			movement_direction += DIRECTION.RIGHT
 	
 	if !alive and grounded:
 		movement_direction = DIRECTION.ZERO
+		$AnimatedSprite.animation = "Dead"
 	
 	
 func _process(_delta):
